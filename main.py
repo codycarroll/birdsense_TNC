@@ -118,7 +118,7 @@ def main(program):
     table = reduced.flatten()
 
     # convert featurecollections to dataframe, combine and formatted as we need
-    df = table_combine(with_PctCloudFree, table, columns1, columns2)
+    df = table_combine(with_PctCloudFree, table, columns1, columns2, stat_list)
     # calculate the cloud free datepoints
     num, percent, percent2, mask, mask2 = cloud_free_percent(df, start_last)
     # create pivoted table and watch list
@@ -133,7 +133,7 @@ def main(program):
         print('found flooding start and end dates in google drive')
     except:
         try:
-            df_d = fields_to_df_d(fields)
+            df_d = fields_to_df_d(fields, stat_list)
             col = 5
             df_pivot = add_flood_dates(df_d, pivot_table(df), stat_list)
             # generate the watch list with low percentage flooded rate
