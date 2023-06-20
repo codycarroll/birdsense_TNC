@@ -133,7 +133,7 @@ def main(program):
         print('found flooding start and end dates in google drive')
     except:
         try:
-            df_d = fields_to_df_d(fields)
+            df_d = fields_to_df_d(fields, stat_list)
             col = 5
             df_pivot = add_flood_dates(df_d, pivot_table(df), stat_list)
             # generate the watch list with low percentage flooded rate
