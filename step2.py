@@ -195,7 +195,7 @@ def standardize_names(df, standard_name, old_name):
     return df
 
 
-def table_combine(table1, table2, columns1, columns2):
+def table_combine(table1, table2, columns1, columns2, stat_list):
     # combine two tables
     df1 = to_dataframe(table1, columns1)
     df2 = to_dataframe(table2, columns2)
@@ -205,6 +205,8 @@ def table_combine(table1, table2, columns1, columns2):
     df2 = standardize_names(df2, "Bid_ID", columns1[0])
     df2 = standardize_names(df2, "Field_ID", columns1[1])
     df = pd.merge(df1, df2, on=['Bid_ID', 'Field_ID', 'Date'], how='left')
+    # selete the enrolled fields and drop the non-enrolled ones
+    df = df.loc[df.Status.isin(stat_list)]
     df['Date'] = pd.to_datetime(df['Date'])
     df['pct_flood'] = df['threshold']
     df['Source'] = 'Sentinel 2'
