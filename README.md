@@ -28,7 +28,7 @@ The main features of the BirdSense Workflow are:
 ## Preparation
 To create your own workflow, Fork (button at top)this repository to your workspace.
 From the drop-down menu of your profile at the top right corner and select "Your repositories". Find the forked BirdSense repo.
-Follow the steps below to obtain required authentications and add to the repository secrets. As the outcome of the preparation, your repo action secrets will be set as below:
+Follow the steps below to obtain the required authentications and add to the repository secrets. As the outcome of the preparation, your repo action secrets will be set as below:
 
 <img src = "images/secrets.png" width = "70%" height = "70%" />
 
@@ -46,7 +46,7 @@ To access data from GEE API, Google Service Account is used to authenticate to E
   2. Create a private key for the Service Account and download the JSON key file
   3. Register your service account for use with the Earth Engine API.
   4. Save the JSON key content as a repo secret with the name of GEE_AUTH under the repo Settings 
-  5. In definitions.py update the "ee_account" variables with the email associated with your GCP service account as below:
+  5. In definitions.py, update the "ee_account" variables with the email associated with your GCP service account as below:
   ```
     ee_account = 'gee-auth@your_service_account_email.iam.gserviceaccount.com'
   ```
@@ -59,18 +59,18 @@ Google Drive Python API is used to download files stored in Google Drive. The [G
   2. Enable Google Drive API for the Google Cloud Project setup from the previous step. 
   3. Grant the Google Drive folder/file access to the Service Account just set up using the Service Account email.
   4. Copy the Google Drive folder/file id from the URL. 
-  5. Save the JSON key content as a repo secrets with the Name GDRIVE_AUTH under the repo Settings.
+  5. Save the JSON key content as a repo secret with the Name GDRIVE_AUTH under the repo Settings.
 
 Instead of the Google Python Quickstart, the [Ben James blog](https://blog.benjames.io/2020/09/13/authorise-your-python-google-drive-api-the-easy-way/) provides an instruction to set up JSON token as an environment variable(repo secret).
 
-After setting up the service accounts for GEE and Google Drive authentications, your service accounts will be similar to below:
+After setting up the service accounts for GEE and Google Drive authentications, your service accounts will be similar as below:
 
 <img src = "images/accounts.png" width = "80%" height = "80%" />
   
 ### DataPane Authentication
 An API token is required to access DataPane and generate a dashboard report on [DataPane](https://datapane.com/). Follow the instruction below and set DataPane API key in repo secrets:
 
-  1. Create a DataPane account use the [link](https://cloud.datapane.com/accounts/signup/) and login
+  1. Create a DataPane account using the [link](https://cloud.datapane.com/accounts/signup/) and log in
   2. Go to Getting started => LOGIN TO DATAPANE (Login with your API key) and copy the API Token. Or you can find the token in your [DataPane profile](https://cloud.datapane.com/settings/).
   3. Add the API token as a repo secret with the Name DATAPANE_TOKEN 
 
@@ -133,17 +133,17 @@ The following fields need to be defined to create a new workflow or modified to 
 ```
 programs = ["WB4B22", "new_program_name"]
 ```
-- end date: end_string (string). the default value is today. 
+- end date: end_string (string). The default value is today. 
   To define another end date, add the date in the format of 'year-month-day' in quotes:
 ```
 end_string = datetime.today().strftime('%Y-%m-%d')
 ```
-- NDWI Threshold : thresh_val (float)
-  To add binary layer based on a threshold
+- NDWI Threshold: thresh_val (float)
+  To add a binary layer based on a threshold
 ```
 thresh_val = 0.25
 ```
-- Cloud free threshold: cloud_free_thresh (float) 
+- Cloud-free threshold: cloud_free_thresh (float) 
   The NDWI results are set to NaN for pixels below cloud free threshold.
 ```
 cloud_free_thresh = 0.5
@@ -153,22 +153,22 @@ cloud_free_thresh = 0.5
 ```
 cloudy = 0.10 
 ```
-- Program specific information: field_bid_names (dictionary)
-  The following areas need to defined or modified:
-  - BidID and FieldID names: the names for bid and field id used in GEE assest in [Define Fields](### Define fields) step
-  - enrolled status (list): the name(s) of the enrollment status used in GEE assest in [Define Fields](### Define fields) step
+- Program-specific information: field_bid_names (dictionary)
+  The following areas need to be defined or modified:
+  - BidID and FieldID names: the names for bid and field id used in GEE asset in [Define Fields](###-Define-fields) step
+  - enrolled status (list): the name(s) of the enrollment status used in GEE asset in [Define Fields](###-Define-fields) step
   - season: the program season and year
-  - start_string in quates: the start date of the program or the first date of monitoring
-  - (Optional) Google Drive folder/file id from the Google Drive [API Authentication](### Google Drive API Authentication (Optional)) step. Use None if no Google Drive File is required. 
+  - start_string in quotes: the start date of the program or the first date of monitoring
+  - (Optional) Google Drive folder/file id from the Google Drive [API Authentication](###-Google-Drive-API-Authentication-(Optional)) step. Use None if no Google Drive File is required. 
 
-  Use the format as below to add new program(s) to the programs dictionary and separate by comma
+  Use the format below to add new program(s) to the programs dictionary and separate by comma.
 ```
 field_bid_names = {
                    "Bid4Birds": ['BidID', 'FieldID', ['Enrolled'], 'Spring 2023', '2023-02-01', None], 
                     "new_program_name": ['BidID_name', 'FieldID_name', ['Enrolled', 'other_enroll_status_name'], 'program season year', 'start_date', 'Google_drive_file_ID']
                   }
 ```
-- field name and field GEE asset maping: field_list (dictionary)
+- field name and field GEE asset mapping: field_list (dictionary)
   add the program name and GEE asset name pair(s) to the field_list dictionary:
 ```
 field_list = {
@@ -177,7 +177,7 @@ field_list = {
               }
 ```
 - Email recipients: recipients (dictionary) 
-  Defined as a list email recipients for the respective program and add the pair to the recipients dictionary:
+  Defined as a list of email recipients for the respective program and add the pair to the recipients dictionary:
 ```
 recipients = {
     "Bid4Birds": ["wangxinyi1986@gmail.com"],
@@ -188,8 +188,8 @@ recipients = {
 ### Format Dashboard
 DataPane is used to generate a reporting dashboard. DataPane allows the transfer of Jupyter Notebook or Python script into an interactive web app. It is friendly with Pandas DataFrame, Matplotlib/Seaborn, Plotly, and Folim for map visualization. 
 Refer to the [DataPane documentation](https://docs.datapane.com/) for page, numbers, table, plot, and map formatting.
-The current dashboard plots are created using Plotly. All the plots creation codes are saved in [step3.py](https://github.com/tnc-ca-geo/birdsense/blob/main/step3.py). Modify the plot functions or add new functions to the step3.py to update the existing plots or add new plots. 
-To modify the layout of the dashboad, modify the  DataPane app (example) as below in [main.py](https://github.com/tnc-ca-geo/birdsense/blob/main/main.py):
+The current dashboard plots are created using Plotly. All the plot creation codes are saved in [step3.py](https://github.com/tnc-ca-geo/birdsense/blob/main/step3.py). Modify the plot functions or add new functions to the step3.py to update the existing plots or add new plots. 
+To modify the layout of the dashboard, modify the  DataPane app (example) as below in [main.py](https://github.com/tnc-ca-geo/birdsense/blob/main/main.py):
 ```
 app = dp.upload_report(
         [
@@ -212,7 +212,7 @@ app = dp.upload_report(
 To read more about DataPane blocks and layout options, refer to the [DataPane documentation](https://docs.datapane.com/).
 
 ### Modifile email message and sender
-Refer to the example of [yagmail](https://pypi.org/project/yagmail/) to format your email contents. Modify the email subject, message/contents and sender in [main.py](https://github.com/tnc-ca-geo/birdsense/blob/main/main.py):
+Refer to the example of [yagmail](https://pypi.org/project/yagmail/) to format your email contents. Modify the email subject, message/contents, and sender in [main.py](https://github.com/tnc-ca-geo/birdsense/blob/main/main.py):
 ```
    # Step 5: send email
     msg = f"Please check the latest BirdSense report {url}" # email message
@@ -239,7 +239,7 @@ The run status and logs can be found in the "Actions" tab as shown below. By cli
 
 Here is an option to manually trigger the workflow by clicking the "Re-run all jobs" at the top right as shown above.
 
-After passing the test, change the action trigger mechanism to "schedule" as mentioned in [Set up a schedule to run repo action](### Set up a schedule to run repo action) step.
+After passing the test, change the action trigger mechanism to "schedule" as mentioned in [Set up a schedule to run repo action](###-Set-up-a-schedule-to-run-repo-action) step.
 
 ## License:
 This project is licensed under the GNU General Public License v2.0 - see the LICENSE file for details
