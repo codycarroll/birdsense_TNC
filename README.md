@@ -222,11 +222,11 @@ Refer to the example of [yagmail](https://pypi.org/project/yagmail/) to format y
              f"Weekly BirdSense Report - {program}", # email subject
              msg)
 ```
-The program specific recipients are defined in [definitions.py](https://github.com/tnc-ca-geo/birdsense/blob/main/definitions.py) in the [Modify user definitions](### Modify user definitions) step.
+The program-specific recipients are defined in [definitions.py](https://github.com/tnc-ca-geo/birdsense/blob/main/definitions.py) in the [Modify user definitions](### Modify user definitions) step.
 
 ### Test your repo
-After completing all the modifications above, we can triggle a test run and debug accordingaly.
-First is to change trigger mechnism to "push", which means the GitHub Action will run the workflow whenever there is a change (Commit) to the repo. To do so, we need to update the codes mentioned in the "Set up a schedule to run repo action" above to the ones in the actions.yml file under .github/workflows folder with the following lines:
+After completing all the modifications above, we can trigger a test run and debug accordingly.
+The first is to change the trigger mechanism to "push", which means the GitHub Action will run the workflow whenever there is a change (Commit) to the repo. To do so, we need to update the codes mentioned in the "Set up a schedule to run repo action" above to the ones in the actions.yml file under the .github/workflows folder with the following lines:
 ```
 on:
   push:
@@ -237,9 +237,9 @@ The run status and logs can be found in the "Actions" tab as shown below. By cli
 
 <img src = "images/actions.png" width = "80%" height = "80%" />
 
-Here is an option of manually trigger the workflow by clicking the "Re-run all jobs" at the top right as shown above.
+Here is an option to manually trigger the workflow by clicking the "Re-run all jobs" at the top right as shown above.
 
-After passing test, change the action trigger mechnism to "schedule" as mentioned in [Set up a schedule to run repo action](### Set up a schedule to run repo action) step.
+After passing the test, change the action trigger mechanism to "schedule" as mentioned in [Set up a schedule to run repo action](### Set up a schedule to run repo action) step.
 
 ## License:
 This project is licensed under the GNU General Public License v2.0 - see the LICENSE file for details
