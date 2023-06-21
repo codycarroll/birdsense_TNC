@@ -1,5 +1,8 @@
 # TNC BirdSense Report Automation Workflow
 
+Project Members: [Wan-Chun Liao](https://github.com/elenaliao1002), [Xinyi(Jessica) Wang](https://github.com/XinyiWang-Jessica)   
+Project Mentors: Kirk Klausmeyer, Natty Rindlaub, Cody Carroll
+
 Every year, over 1 billion birds migrate along the Pacific Flyway and travel through California. Many of these birds need wetlands for food and rest to support their journey, but over 95% of the historical wetlands in the Central Valley have been drained and developed. The Nature Conservancy and partners recently launched a program called BirdReturns to pay farmers to flood their fields to support migratory wetland birds.   
 
 For more information, refer to [BirdReturns: A Habitat Timeshare for Migratory Birds](https://www.nature.org/en-us/about-us/where-we-work/united-states/california/stories-in-california/migration-moneyball/).  
@@ -10,7 +13,7 @@ Based on the promising experiment outcomes, this GitHub Repository is aimed to b
 
 This repo utilizes the GitHub Action workflow to build a data pipeline, as shown in the figure below:
 
-<img src = "images/workflow.png" width = "80%" height = "80%" />
+<img src = "images/workflow.png" width = "70%" height = "70%" />
 
 ## Features:
 The main features of the BirdSense Workflow are:
@@ -27,7 +30,7 @@ To create your own workflow, Fork (button at top)this repository to your workspa
 From the drop-down menu of your profile at the top right corner and select "Your repositories". Find the forked BirdSense repo.
 Follow the steps below to obtain required authentications and add to the repository secrets. As the outcome of the preparation, your repo action secrets will be set as below:
 
-<img src = "images/secrets.png" width = "80%" height = "80%" />
+<img src = "images/secrets.png" width = "70%" height = "70%" />
 
 ### Create a Google Cloud Project
 A Google Cloud project service account is required to obtain authentications for GEE and Google Drive. 
@@ -67,7 +70,7 @@ After setting up the service accounts for GEE and Google Drive authentications, 
 ### DataPane Authentication
 An API token is required to access DataPane and generate a dashboard report on [DataPane](https://datapane.com/). Follow the instruction below and set DataPane API key in repo secrets:
 
-  1. Create a DataPane account and login
+  1. Create a DataPane account use the [link](https://cloud.datapane.com/accounts/signup/) and login
   2. Go to Getting started => LOGIN TO DATAPANE (Login with your API key) and copy the API Token. Or you can find the token in your [DataPane profile](https://cloud.datapane.com/settings/).
   3. Add the API token as a repo secret with the Name DATAPANE_TOKEN 
 
@@ -108,7 +111,7 @@ There is no need for an environment setup. GitHub Action will install Python and
 ### Set up a schedule to run repo action
 GitHub repository can run the script on a fixed schedule, such as daily, weekly, or a specific day of the week/month. The scheduling is done by POSIX cron syntax. For more information, refer to the [GitHub Workflow Trigger Events - Schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows).
 Use [crontab guru](https://crontab.guru) to help generate your cron syntax.
-Here is an example of every Monday morning at 8 AM (PT) in the actions.yml file under .github/workflows folder:
+Here is an example of every Monday morning at 8 AM (PT) in the [actions.yml](https://github.com/tnc-ca-geo/birdsense/blob/main/.github/workflows/actions.yml) file under .github/workflows folder:
 ```
 on:
     schedule:
@@ -120,27 +123,106 @@ on:
 To define the agricultural fields to monitor, go to [Google Earth Engine Code Editor](https://code.earthengine.google.com/) and click on the "Assets" tab.  Click "New" and then select the "Shape file" option under "Table Uploads".  Follow the prompts onscreen.  Once the shapefile is published, share the asset with everyone, and then copy and paste the link to the asset into the user definitions file.
 
 ### Modify user definitions
-The following fields need to be defined:
-- Date Range (start and end dates for data extraction from GEE): 
-  - start_string: string. Program specific start_string in field_bid_names dictionary
-  - end_string: string. The default value is today
-- (Optional) Google Drive folder/file id in field_bid_names dictionary
-- Cloud free threshold: cloud_free_thresh. The NDWI results are set to NaN for pixels below cloud free threshold.
-- NDWI Threshold (to add binary layer based on a threshold): thresh_val
-- Cloudy threshold: cloudy. If the percentage of cloud-free fields is below this threshold, the status reporting on DataPane for this week will be disabled. 
-- Programs to run: programs: list
-- Feature names of Field Id, Bid ID, and enrolled status used for the specific program: field_bid_names
-- Email recipients can be defined as a list following the respective program. 
+Navigate to [definitions.py](https://github.com/tnc-ca-geo/birdsense/blob/main/definitions.py) and click the editing button to start modifying:
 
-Here is an example of adding a new program:
-(TBD)
+<img src = "images/edit.png" width = "70%" height = "70%" />
+
+The following fields need to be defined to create a new workflow or modified to add a new program:
+- Programs to run: programs (list)
+  add the name(s) of the program(s) in quotes to the programs (list) variable as below and separate by commas:
+```
+programs = ["WB4B22", "new_program_name"]
+```
+- end date: end_string (string). the default value is today. 
+  To define another end date, add the date in the format of 'year-month-day' in quotes:
+```
+end_string = datetime.today().strftime('%Y-%m-%d')
+```
+- NDWI Threshold : thresh_val (float)
+  To add binary layer based on a threshold
+```
+thresh_val = 0.25
+```
+- Cloud free threshold: cloud_free_thresh (float) 
+  The NDWI results are set to NaN for pixels below cloud free threshold.
+```
+cloud_free_thresh = 0.5
+```
+- Cloudy threshold: cloudy (float)
+  If the percentage of cloud-free fields is below this threshold, the status reporting on DataPane for this week will be disabled. 
+```
+cloudy = 0.10 
+```
+- Program specific information: field_bid_names (dictionary)
+  The following areas need to defined or modified:
+  - BidID and FieldID names: the names for bid and field id used in GEE assest in [Define Fields](### Define fields) step
+  - enrolled status (list): the name(s) of the enrollment status used in GEE assest in [Define Fields](### Define fields) step
+  - season: the program season and year
+  - start_string in quates: the start date of the program or the first date of monitoring
+  - (Optional) Google Drive folder/file id from the Google Drive [API Authentication](### Google Drive API Authentication (Optional)) step. Use None if no Google Drive File is required. 
+
+  Use the format as below to add new program(s) to the programs dictionary and separate by comma
+```
+field_bid_names = {
+                   "Bid4Birds": ['BidID', 'FieldID', ['Enrolled'], 'Spring 2023', '2023-02-01', None], 
+                    "new_program_name": ['BidID_name', 'FieldID_name', ['Enrolled', 'other_enroll_status_name'], 'program season year', 'start_date', 'Google_drive_file_ID']
+                  }
+```
+- field name and field GEE asset maping: field_list (dictionary)
+  add the program name and GEE asset name pair(s) to the field_list dictionary:
+```
+field_list = {
+              "Bid4Birds": in_fields_Bid4Birds,
+              "new_program_name": Gee_asset_name
+              }
+```
+- Email recipients: recipients (dictionary) 
+  Defined as a list email recipients for the respective program and add the pair to the recipients dictionary:
+```
+recipients = {
+    "Bid4Birds": ["wangxinyi1986@gmail.com"],
+    "new_program_name": [ "recipient1@gmail.com", recipient2@gmail.com]
+    }
+```
 
 ### Format Dashboard
 DataPane is used to generate a reporting dashboard. DataPane allows the transfer of Jupyter Notebook or Python script into an interactive web app. It is friendly with Pandas DataFrame, Matplotlib/Seaborn, Plotly, and Folim for map visualization. 
 Refer to the [DataPane documentation](https://docs.datapane.com/) for page, numbers, table, plot, and map formatting.
+The current dashboard plots are created using Plotly. All the plots creation codes are saved in [step3.py](https://github.com/tnc-ca-geo/birdsense/blob/main/step3.py). Modify the plot functions or add new functions to the step3.py to update the existing plots or add new plots. 
+To modify the layout of the dashboad, modify the  DataPane app (example) as below in [main.py](https://github.com/tnc-ca-geo/birdsense/blob/main/main.py):
+```
+app = dp.upload_report(
+        [
+        dp.Text(f"# BirdSense: Drought Relief WaterBird Program - {program}, {season} #"),
+        dp.Group(
+            dp.BigNumber(heading='Total Fields', value=num),
+            dp.BigNumber(heading='Field with cloud-free data last week',
+                         value="{:.2%}".format(percent)),
+            columns=2),  
+        dp.Table(watch.style.background_gradient(cmap="autumn")),
+        dp.Select(
+            blocks=[
+                dp.Plot(heatmaps[i], label=f'Bids {int(cut_bins[i])} ~ {int(cut_bins[i+1])}') for i in range(len(heatmaps))] +
+            [dp.DataTable(df_pivot.round(3), label="Data Table")],
+            type=dp.SelectType.TABS),
+        dp.Plot(pct_map)
+        ], name=report_name,  publicly_visible=True
+    )
+```
+To read more about DataPane blocks and layout options, refer to the [DataPane documentation](https://docs.datapane.com/).
 
-### Modifile email message, sender and recieptants
-Refer to the example of [yagmail](https://pypi.org/project/yagmail/) to format your email contents.
+### Modifile email message and sender
+Refer to the example of [yagmail](https://pypi.org/project/yagmail/) to format your email contents. Modify the email subject, message/contents and sender in [main.py](https://github.com/tnc-ca-geo/birdsense/blob/main/main.py):
+```
+   # Step 5: send email
+    msg = f"Please check the latest BirdSense report {url}" # email message
+    yag = yagmail.SMTP("your_gmail_address@gmail.com", GMAIL_PWD) # email sender
+    # Adding Content and sending it
+    yag.send(recipients[program], # recipients defined in definitions.py
+             f"Weekly BirdSense Report - {program}", # email subject
+             msg)
+```
+The program specific recipients are defined in [definitions.py](https://github.com/tnc-ca-geo/birdsense/blob/main/definitions.py) in the [Modify user definitions](### Modify user definitions) step.
 
 ### Test your repo
 After completing all the modifications above, we can triggle a test run and debug accordingaly.
@@ -157,6 +239,7 @@ The run status and logs can be found in the "Actions" tab as shown below. By cli
 
 Here is an option of manually trigger the workflow by clicking the "Re-run all jobs" at the top right as shown above.
 
+After passing test, change the action trigger mechnism to "schedule" as mentioned in [Set up a schedule to run repo action](### Set up a schedule to run repo action) step.
 
 ## License:
 This project is licensed under the GNU General Public License v2.0 - see the LICENSE file for details
