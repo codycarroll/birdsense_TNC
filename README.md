@@ -222,7 +222,7 @@ Refer to the example of [yagmail](https://pypi.org/project/yagmail/) to format y
              f"Weekly BirdSense Report - {program}", # email subject
              msg)
 ```
-The program-specific recipients are defined in [definitions.py](https://github.com/tnc-ca-geo/birdsense/blob/main/definitions.py) in the [Modify user definitions](### Modify user definitions) step.
+The program-specific recipients are defined in [definitions.py](https://github.com/tnc-ca-geo/birdsense/blob/main/definitions.py) in the [Modify user definitions](###-Modify-user-definitions) step.
 
 ### Test your repo
 After completing all the modifications above, we can trigger a test run and debug accordingly.
