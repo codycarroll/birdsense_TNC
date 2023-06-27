@@ -250,6 +250,7 @@ This project is licensed under the GNU General Public License v2.0 - see the LIC
 Xinyi Wang (USF)
 Wan-Chun Liao (USF)
 Kirk Klausmeyer (TNC)
+Natty Rindlaub (TNC)
 Cody Carroll (USF)
 
 
