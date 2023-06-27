@@ -241,8 +241,17 @@ Here is an option to manually trigger the workflow by clicking the "Re-run all j
 
 After passing the test, change the action trigger mechanism to "schedule" as mentioned in [Set up a schedule to run repo action](###-Set-up-a-schedule-to-run-repo-action) step.
 
+
 ## License:
-This project is licensed under the GNU General Public License v2.0 - see the LICENSE file for details
+This project is licensed under the GNU General Public License v2.0 - see the LICENSE file for details.
+
+
+## Project Contributors 
+Xinyi Wang (USF)
+Wan-Chun Liao (USF)
+Kirk Klausmeyer (TNC)
+Cody Carroll (USF)
+
 
 ## Acknowledgements:
-
+We would also like to thank Robert Clements for his invaluable advice. 
